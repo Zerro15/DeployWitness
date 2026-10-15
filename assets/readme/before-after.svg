@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="286" viewBox="0 0 1080 286" role="img" aria-labelledby="title desc">
+  <title id="title">A Compose network contract before and after a change</title>
+  <desc id="desc">The baseline connects API to database. The changed configuration disconnects them and breaks an explicit contract. The repaired configuration reconnects them.</desc>
+  <rect width="1080" height="286" rx="18" fill="#0B1120"/>
+  <g font-family="Inter,Segoe UI,Arial,sans-serif">
+    <g transform="translate(20 20)"><rect width="332" height="246" rx="14" fill="#131E2C" stroke="#344A5C"/>
+      <text x="20" y="34" fill="#9BB0C4" font-size="13" font-weight="600" letter-spacing="1">BASELINE · CONTRACT HOLDS</text>
+      <rect x="22" y="65" width="112" height="56" rx="10" fill="#172C36" stroke="#31796F"/><text x="78" y="99" text-anchor="middle" fill="#F3F7FA" font-size="17" font-weight="600">api</text>
+      <rect x="198" y="65" width="112" height="56" rx="10" fill="#172C36" stroke="#31796F"/><text x="254" y="99" text-anchor="middle" fill="#F3F7FA" font-size="17" font-weight="600">db</text>
+      <path d="M134 93h64" stroke="#4CE0CB" stroke-width="3" stroke-linecap="round"/><circle cx="166" cy="93" r="5" fill="#0B1120" stroke="#4CE0CB" stroke-width="2"/>
+      <rect x="22" y="157" width="288" height="54" rx="9" fill="#102B31"/><circle cx="42" cy="184" r="5" fill="#4CE0CB"/><text x="57" y="189" fill="#B5F5EB" font-size="13">required_network_links: api → db</text>
+    </g>
+    <g transform="translate(374 20)"><rect width="332" height="246" rx="14" fill="#131E2C" stroke="#8C5738"/>
+      <text x="20" y="34" fill="#F4B86D" font-size="13" font-weight="600" letter-spacing="1">CANDIDATE · CONTRACT BROKEN</text>
+      <rect x="22" y="65" width="112" height="56" rx="10" fill="#172638" stroke="#405A72"/><text x="78" y="99" text-anchor="middle" fill="#F3F7FA" font-size="17" font-weight="600">api</text>
+      <rect x="198" y="65" width="112" height="56" rx="10" fill="#172638" stroke="#405A72"/><text x="254" y="99" text-anchor="middle" fill="#F3F7FA" font-size="17" font-weight="600">db</text>
+      <path d="M134 93h18m28 0h18" stroke="#526A7B" stroke-width="3" stroke-dasharray="5 6"/><circle cx="166" cy="93" r="12" fill="#33251D" stroke="#F4B86D" stroke-width="2"/><path d="M162 89l8 8m0-8l-8 8" stroke="#F4B86D" stroke-width="2"/>
+      <rect x="22" y="157" width="288" height="54" rx="9" fill="#33251D"/><circle cx="42" cy="184" r="5" fill="#F4B86D"/><text x="57" y="189" fill="#F7D5A9" font-size="13">PROVEN_CONFIG_BREAK · static</text>
+    </g>
+    <g transform="translate(728 20)"><rect width="332" height="246" rx="14" fill="#131E2C" stroke="#31796F"/>
+      <text x="20" y="34" fill="#4CE0CB" font-size="13" font-weight="600" letter-spacing="1">FIXED · CONTRACT RESTORED</text>
+      <rect x="22" y="65" width="112" height="56" rx="10" fill="#172C36" stroke="#31796F"/><text x="78" y="99" text-anchor="middle" fill="#F3F7FA" font-size="17" font-weight="600">api</text>
+      <rect x="198" y="65" width="112" height="56" rx="10" fill="#172C36" stroke="#31796F"/><text x="254" y="99" text-anchor="middle" fill="#F3F7FA" font-size="17" font-weight="600">db</text>
+      <path d="M134 93h64" stroke="#4CE0CB" stroke-width="3" stroke-linecap="round"/><circle cx="166" cy="93" r="5" fill="#0B1120" stroke="#4CE0CB" stroke-width="2"/>
+      <rect x="22" y="157" width="288" height="54" rx="9" fill="#102B31"/><circle cx="42" cy="184" r="5" fill="#4CE0CB"/><text x="57" y="189" fill="#B5F5EB" font-size="13">NO_FINDING · checked rules only</text>
+    </g>
+  </g>
+</svg>

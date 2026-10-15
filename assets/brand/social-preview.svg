@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
+  <title id="title">DeployWitness — Know what breaks before you deploy.</title><desc id="desc">Local-first Docker Compose change analysis with deterministic configuration witnesses.</desc>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#243648" stroke-width="1" opacity=".38"/></pattern>
+    <linearGradient id="fade" x1="0" x2="1"><stop stop-color="#4CE0CB" stop-opacity=".12"/><stop offset="1" stop-color="#4CE0CB" stop-opacity="0"/></linearGradient>
+  </defs>
+  <rect width="1280" height="640" fill="#0B1120"/><rect width="1280" height="640" fill="url(#grid)"/>
+  <path d="M0 450C270 370 490 600 780 485s335-145 500-70v225H0Z" fill="url(#fade)"/>
+  <g transform="translate(96 190)">
+    <rect width="84" height="84" rx="21" fill="#131E2C"/>
+    <g transform="translate(10 10) scale(1)">
+      <path d="M16 20h11M37 20h11M16 44h11M37 44h11M20 24v16M44 24v16" fill="none" stroke="#426075" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M20 20h9m6 0h9M20 44h9m6 0h9" fill="none" stroke="#4CE0CB" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="15" cy="20" r="4" fill="#4CE0CB"/><circle cx="49" cy="20" r="4" fill="#4CE0CB"/><circle cx="15" cy="44" r="4" fill="#9BB0C4"/><circle cx="49" cy="44" r="4" fill="#9BB0C4"/>
+      <circle cx="32" cy="20" r="5" fill="#131E2C" stroke="#F4B86D" stroke-width="2.5"/><circle cx="32" cy="44" r="5" fill="#131E2C" stroke="#4CE0CB" stroke-width="2.5"/>
+    </g>
+  </g>
+  <text x="205" y="247" fill="#F3F7FA" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="68" font-weight="700" letter-spacing="-2.4">Deploy<tspan fill="#4CE0CB">Witness</tspan></text>
+  <text x="100" y="350" fill="#F3F7FA" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="36" font-weight="600">Know what breaks before you deploy.</text>
+  <text x="102" y="407" fill="#9BB0C4" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="23">Docker Compose change analysis with checkable evidence.</text>
+  <g transform="translate(102 482)" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="16" font-weight="600">
+    <rect width="218" height="46" rx="23" fill="#132B33" stroke="#2D766E"/><circle cx="24" cy="23" r="5" fill="#4CE0CB"/><text x="42" y="29" fill="#B5F5EB">LOCAL FIRST</text>
+    <rect x="234" width="235" height="46" rx="23" fill="#2B261E" stroke="#80603A"/><circle cx="258" cy="23" r="5" fill="#F4B86D"/><text x="276" y="29" fill="#F7D5A9">DETERMINISTIC</text>
+    <rect x="485" width="235" height="46" rx="23" fill="#182638" stroke="#405A72"/><circle cx="509" cy="23" r="5" fill="#9BB0C4"/><text x="527" y="29" fill="#CAD8E2">NO TELEMETRY</text>
+  </g>
+  <g transform="translate(934 170)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect width="260" height="324" rx="20" fill="#101B29" stroke="#263B4E" stroke-width="2"/>
+    <text x="24" y="39" fill="#9BB0C4" stroke="none" font-family="ui-monospace,Consolas,monospace" font-size="13">COMPOSE CHANGE</text>
+    <path d="M30 85h72m54 0h72M130 89v65M50 215h64m34 0h62" stroke="#3C596C" stroke-width="3"/>
+    <path d="M31 85h71m56 0h69" stroke="#4CE0CB" stroke-width="4"/>
+    <circle cx="28" cy="85" r="7" fill="#4CE0CB" stroke="none"/><circle cx="232" cy="85" r="7" fill="#4CE0CB" stroke="none"/>
+    <circle cx="130" cy="85" r="12" fill="#101B29" stroke="#F4B86D" stroke-width="3"/><circle cx="130" cy="215" r="12" fill="#101B29" stroke="#4CE0CB" stroke-width="3"/>
+    <circle cx="49" cy="215" r="7" fill="#9BB0C4" stroke="none"/><circle cx="211" cy="215" r="7" fill="#9BB0C4" stroke="none"/>
+    <rect x="23" y="267" width="214" height="34" rx="9" fill="#33251D" stroke="#8C5738"/><circle cx="41" cy="284" r="4" fill="#F4B86D" stroke="none"/>
+    <text x="54" y="289" fill="#F4B86D" stroke="none" font-family="ui-monospace,Consolas,monospace" font-size="12">CONTRACT CHANGED</text>
+  </g>
+</svg>
