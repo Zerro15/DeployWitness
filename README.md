@@ -54,15 +54,15 @@ The witness establishes a static Compose contract violation. It does not claim a
 
 ## Quick start
 
-Requires Python 3.12+. Until the first release is published, install the reviewed `main` commit below. After publication, the recommended install is the verified wheel attached to the [GitHub Release](https://github.com/Zerro15/DeployWitness/releases); see [Getting started](docs/GETTING_STARTED.md) for checksum verification and installation steps.
+Requires Python 3.12+. For the alpha, download the [v0.1.0a1 wheel](https://github.com/Zerro15/DeployWitness/releases/download/v0.1.0a1/deploywitness-0.1.0a1-py3-none-any.whl) and [SHA256SUMS.txt](https://github.com/Zerro15/DeployWitness/releases/download/v0.1.0a1/SHA256SUMS.txt) into the same folder. Verify the wheel, then install it:
 
 ```bash
-git clone https://github.com/Zerro15/DeployWitness.git
-cd DeployWitness
-git checkout --detach f40f05da1a374a79979d8958e8bacef7c360848b
-python -m pip install .
-deploywitness check --base examples/before/compose.yaml --head examples/after/compose.yaml
+python -c "import hashlib,pathlib,sys; f='deploywitness-0.1.0a1-py3-none-any.whl'; sums={name:digest for digest,name in (line.split(maxsplit=1) for line in pathlib.Path('SHA256SUMS.txt').read_text(encoding='ascii').splitlines())}; actual=hashlib.sha256(pathlib.Path(f).read_bytes()).hexdigest(); print('SHA256 OK:', f) if sums.get(f)==actual else sys.exit('SHA256 verification failed')"
+python -m pip install ./deploywitness-0.1.0a1-py3-none-any.whl
+deploywitness version
 ```
+
+This checksum command works in Linux, macOS, and Windows PowerShell. For the demo comparison, clone the repository at the release tag or see [Getting started](docs/GETTING_STARTED.md) for both options.
 
 To work on DeployWitness, install development tools with `python -m pip install -e '.[dev]'`. `scan` discovers a Compose file and summarizes its services; it does not compare changes. Change analysis requires explicit `--base` and `--head` files. If multiple standard Compose files are found, choose one with `--file`—the tool does not guess which file is deployed.
 
