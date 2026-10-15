@@ -54,7 +54,7 @@ The witness establishes a static Compose contract violation. It does not claim a
 
 ## Quick start
 
-Requires Python 3.12+. The package is not published on PyPI, and the current `main` branch does not yet contain the package. To try the implementation in [Draft PR #1](https://github.com/Zerro15/DeployWitness/pull/1), install its branch:
+Requires Python 3.12+. The package is not published on PyPI yet. To try the current Compose alpha, install its source branch:
 
 ```bash
 git clone --branch feat/compose-witness-mvp https://github.com/Zerro15/DeployWitness.git

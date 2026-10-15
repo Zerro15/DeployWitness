@@ -10,7 +10,7 @@
 
 ## Try the current alpha
 
-DeployWitness is not published on PyPI, and `main` does not yet contain the package. The current CLI is in [Draft PR #1](https://github.com/Zerro15/DeployWitness/pull/1). Install its branch:
+DeployWitness is not published on PyPI yet. To try the current Compose alpha, install its source branch:
 
 ```bash
 git clone --branch feat/compose-witness-mvp https://github.com/Zerro15/DeployWitness.git

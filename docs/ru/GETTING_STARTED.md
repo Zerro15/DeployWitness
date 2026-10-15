@@ -10,7 +10,7 @@
 
 ## Попробовать текущую alpha
 
-Пакет пока не опубликован в PyPI, а в `main` ещё нет устанавливаемого пакета. Текущий CLI находится в [Draft PR #1](https://github.com/Zerro15/DeployWitness/pull/1). Установите пакет из его ветки:
+Пакет пока не опубликован в PyPI. Чтобы попробовать текущую Compose alpha, установите пакет из её ветки:
 
 ```bash
 git clone --branch feat/compose-witness-mvp https://github.com/Zerro15/DeployWitness.git

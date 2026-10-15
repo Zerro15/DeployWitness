@@ -53,7 +53,7 @@ PROVEN_CONFIG_BREAK COMPOSE_NETWORK_LINK api->db: Required or previously shared 
 
 ## Быстрый запуск
 
-Нужен Python 3.12 или новее. Пакет пока не опубликован в PyPI, а в текущей ветке `main` ещё нет устанавливаемого пакета. Для проверки реализации из [Draft PR #1](https://github.com/Zerro15/DeployWitness/pull/1) установите его ветку:
+Нужен Python 3.12 или новее. Пакет пока не опубликован в PyPI. Чтобы попробовать текущую Compose alpha, установите пакет из её ветки:
 
 ```bash
 git clone --branch feat/compose-witness-mvp https://github.com/Zerro15/DeployWitness.git

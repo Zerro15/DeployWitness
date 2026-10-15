@@ -32,7 +32,7 @@ No. Analysis is local and makes no network calls. Python package installation ma
 
 ### Is there a ready-made PR checker or published package?
 
-Not yet. The package is currently in [Draft PR #1](https://github.com/Zerro15/DeployWitness/pull/1) and is not published to PyPI. The GitHub workflow is a manually dispatched example using fixed repository files; it does not fetch PR base/head automatically.
+Not yet. The package is not published to PyPI. The GitHub workflow is a manually dispatched example using fixed repository files; it does not fetch PR base/head automatically.
 
 ### What does `NO_FINDING` mean?
 
