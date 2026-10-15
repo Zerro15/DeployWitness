@@ -27,7 +27,7 @@ The sample produces `PROVEN_CONFIG_BREAK` because the baseline explicitly requir
 After `v0.1.0a1` is published, the recommended installation is the wheel from the [GitHub Release](https://github.com/Zerro15/DeployWitness/releases). Download `deploywitness-0.1.0a1-py3-none-any.whl` and `SHA256SUMS.txt` into the same directory. Verify the wheel with this Python standard-library command; it checks only the named wheel, so the sdist does not need to be downloaded:
 
 ```text
-python -c "import hashlib,pathlib; f='deploywitness-0.1.0a1-py3-none-any.whl'; sums={name:digest for digest,name in (line.split(maxsplit=1) for line in pathlib.Path('SHA256SUMS.txt').read_text(encoding='ascii').splitlines())}; actual=hashlib.sha256(pathlib.Path(f).read_bytes()).hexdigest(); assert sums.get(f)==actual, 'SHA256 verification failed'; print('SHA256 OK:', f)"
+python -c "import hashlib,pathlib,sys; f='deploywitness-0.1.0a1-py3-none-any.whl'; sums={name:digest for digest,name in (line.split(maxsplit=1) for line in pathlib.Path('SHA256SUMS.txt').read_text(encoding='ascii').splitlines())}; actual=hashlib.sha256(pathlib.Path(f).read_bytes()).hexdigest(); print('SHA256 OK:', f) if sums.get(f)==actual else sys.exit('SHA256 verification failed')"
 ```
 
 The exact same command works in Linux, macOS, and Windows PowerShell. Then install and verify:

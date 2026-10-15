@@ -27,7 +27,7 @@ deploywitness check --base examples/before/compose.yaml --head examples/after/co
 После публикации `v0.1.0a1` рекомендуется установить wheel из [GitHub Release](https://github.com/Zerro15/DeployWitness/releases). Скачайте `deploywitness-0.1.0a1-py3-none-any.whl` и `SHA256SUMS.txt` в одну папку. Проверьте wheel этой командой стандартной библиотеки Python: она сверяет только указанный wheel, поэтому sdist скачивать не нужно.
 
 ```text
-python -c "import hashlib,pathlib; f='deploywitness-0.1.0a1-py3-none-any.whl'; sums={name:digest for digest,name in (line.split(maxsplit=1) for line in pathlib.Path('SHA256SUMS.txt').read_text(encoding='ascii').splitlines())}; actual=hashlib.sha256(pathlib.Path(f).read_bytes()).hexdigest(); assert sums.get(f)==actual, 'SHA256 verification failed'; print('SHA256 OK:', f)"
+python -c "import hashlib,pathlib,sys; f='deploywitness-0.1.0a1-py3-none-any.whl'; sums={name:digest for digest,name in (line.split(maxsplit=1) for line in pathlib.Path('SHA256SUMS.txt').read_text(encoding='ascii').splitlines())}; actual=hashlib.sha256(pathlib.Path(f).read_bytes()).hexdigest(); print('SHA256 OK:', f) if sums.get(f)==actual else sys.exit('SHA256 verification failed')"
 ```
 
 Одна и та же команда работает в Linux, macOS и Windows PowerShell. Затем установите пакет и проверьте его:
