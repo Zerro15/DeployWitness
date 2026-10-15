@@ -8,36 +8,31 @@
 - A reviewed Docker Compose YAML file. Docker Engine and the Docker CLI are not needed for static analysis.
 - Network access is needed to install Python dependencies unless they are already available. After installation, analysis itself makes no network calls.
 
-## Install the reviewed main commit before release
+## Install the alpha from GitHub Release
 
-Until the first release is published, install the reviewed `main` commit `f40f05da1a374a79979d8958e8bacef7c360848b`:
-
-```bash
-git clone https://github.com/Zerro15/DeployWitness.git
-cd DeployWitness
-git checkout --detach f40f05da1a374a79979d8958e8bacef7c360848b
-python -m pip install .
-deploywitness check --base examples/before/compose.yaml --head examples/after/compose.yaml
-```
-
-The sample produces `PROVEN_CONFIG_BREAK` because the baseline explicitly requires a shared network and the candidate removes that relationship. This proves a static configuration contract violation, not a runtime outage.
-
-## Install from a GitHub Release
-
-After `v0.1.0a1` is published, the recommended installation is the wheel from the [GitHub Release](https://github.com/Zerro15/DeployWitness/releases). Download `deploywitness-0.1.0a1-py3-none-any.whl` and `SHA256SUMS.txt` into the same directory. Verify the wheel with this Python standard-library command; it checks only the named wheel, so the sdist does not need to be downloaded:
+The recommended install is the verified wheel attached to the [v0.1.0a1 GitHub Release](https://github.com/Zerro15/DeployWitness/releases/tag/v0.1.0a1). Download the [wheel](https://github.com/Zerro15/DeployWitness/releases/download/v0.1.0a1/deploywitness-0.1.0a1-py3-none-any.whl) and [SHA256SUMS.txt](https://github.com/Zerro15/DeployWitness/releases/download/v0.1.0a1/SHA256SUMS.txt) into the same folder. In a terminal opened in that folder, verify the wheel:
 
 ```text
 python -c "import hashlib,pathlib,sys; f='deploywitness-0.1.0a1-py3-none-any.whl'; sums={name:digest for digest,name in (line.split(maxsplit=1) for line in pathlib.Path('SHA256SUMS.txt').read_text(encoding='ascii').splitlines())}; actual=hashlib.sha256(pathlib.Path(f).read_bytes()).hexdigest(); print('SHA256 OK:', f) if sums.get(f)==actual else sys.exit('SHA256 verification failed')"
 ```
 
-The exact same command works in Linux, macOS, and Windows PowerShell. Then install and verify:
+The same command works in Linux, macOS, and Windows PowerShell. It checks the wheel using only the wheel and checksum file; you do not need to download the sdist. Then install and verify:
 
 ```text
 python -m pip install ./deploywitness-0.1.0a1-py3-none-any.whl
 deploywitness version
 ```
 
-The `.tar.gz` source distribution is also attached for environments that need it; verify it by replacing the filename in the command with `deploywitness-0.1.0a1.tar.gz`. Installing dependencies may require access to your configured Python package index. Analysis itself makes no network requests. These assets become available only after a maintainer publishes the GitHub pre-release. A real fork-originated GitHub PR run has not yet been verified; see [integration limits](INTEGRATIONS.md).
+For an alternative source install, clone the release tag and install from its checkout:
+
+```bash
+git clone --branch v0.1.0a1 --depth 1 https://github.com/Zerro15/DeployWitness.git
+cd DeployWitness
+python -m pip install .
+deploywitness check --base examples/before/compose.yaml --head examples/after/compose.yaml
+```
+
+The sample produces `PROVEN_CONFIG_BREAK` because the baseline explicitly requires a shared network and the candidate removes that relationship. This proves a static configuration contract violation, not a runtime outage. Installing dependencies may require access to your configured Python package index; analysis itself makes no network requests. A real fork-originated GitHub PR run has not yet been verified; see [integration limits](INTEGRATIONS.md).
 
 ## Scan one configuration
 

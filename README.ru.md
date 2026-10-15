@@ -53,15 +53,15 @@ PROVEN_CONFIG_BREAK COMPOSE_NETWORK_LINK api->db: Required or previously shared 
 
 ## Быстрый запуск
 
-Нужен Python 3.12 или новее. До публикации первого релиза установите проверенный commit `main` по инструкции ниже. После публикации рекомендуется установить проверенный wheel из [GitHub Release](https://github.com/Zerro15/DeployWitness/releases); шаги установки и проверки контрольной суммы описаны в разделе [«Начало работы»](docs/ru/GETTING_STARTED.md).
+Нужен Python 3.12 или новее. Для alpha скачайте [wheel v0.1.0a1](https://github.com/Zerro15/DeployWitness/releases/download/v0.1.0a1/deploywitness-0.1.0a1-py3-none-any.whl) и [SHA256SUMS.txt](https://github.com/Zerro15/DeployWitness/releases/download/v0.1.0a1/SHA256SUMS.txt) в одну папку. Проверьте wheel и установите его:
 
 ```bash
-git clone https://github.com/Zerro15/DeployWitness.git
-cd DeployWitness
-git checkout --detach f40f05da1a374a79979d8958e8bacef7c360848b
-python -m pip install .
-deploywitness check --base examples/before/compose.yaml --head examples/after/compose.yaml
+python -c "import hashlib,pathlib,sys; f='deploywitness-0.1.0a1-py3-none-any.whl'; sums={name:digest for digest,name in (line.split(maxsplit=1) for line in pathlib.Path('SHA256SUMS.txt').read_text(encoding='ascii').splitlines())}; actual=hashlib.sha256(pathlib.Path(f).read_bytes()).hexdigest(); print('SHA256 OK:', f) if sums.get(f)==actual else sys.exit('SHA256 verification failed')"
+python -m pip install ./deploywitness-0.1.0a1-py3-none-any.whl
+deploywitness version
 ```
+
+Эта команда проверки контрольной суммы работает в Linux, macOS и Windows PowerShell. Для демонстрационного сравнения клонируйте репозиторий на теге релиза или следуйте разделу [«Начало работы»](docs/ru/GETTING_STARTED.md).
 
 `scan` находит Compose-файл и показывает количество сервисов, но **не сравнивает изменения**. Для сравнения нужны явные файлы `--base` и `--head`. Если обнаружено несколько стандартных имён, выберите файл через `--file`: инструмент не угадывает, какой конфигурации соответствует production.
 
