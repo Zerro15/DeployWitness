@@ -24,7 +24,11 @@ jobs:
       deploywitness_ref: main
 ```
 
-For production use, pin both uses and deploywitness_ref to a reviewed DeployWitness commit SHA. The workflow checks out the target repository's base commit and DeployWitness source separately, fetches the PR head as Git data, and writes the report to the GitHub Actions job summary. It does not check out or execute PR code, create comments, or send configuration to a DeployWitness service.
+For production use, replace both `@main` and `deploywitness_ref: main` with the same reviewed DeployWitness commit SHA. The workflow checks out the target repository's base commit and DeployWitness source separately, fetches the PR head as Git data, and writes the report to the GitHub Actions job summary. It does not check out or execute PR code, create comments, or send configuration to a DeployWitness service.
+
+### View the report
+
+Open the repository's **Actions** tab, select the **DeployWitness** run for your pull request, and read the **workflow run summary**. The Markdown report is shown there under the job summary. Open the job itself only when you need step logs; DeployWitness does not post a pull request comment.
 
 PROVEN_CONFIG_BREAK fails the check. POTENTIAL_RISK is advisory. UNKNOWN fails visibly as inconclusive. A clean result means only that implemented checks found no issue. Added/deleted Compose files, multiple Compose files in the same directory, unsupported features, or oversized inputs are reported as UNKNOWN.
 
