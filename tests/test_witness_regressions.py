@@ -235,6 +235,14 @@ def statuses(tmp_path: Path, before: str, after: str) -> set[str]:
             "services: {}\nx-deploywitness: {}",
             "UNKNOWN",
         ),
+        # Scenario 40: a contract-only change is visible even when Compose state is identical.
+        (
+            "services: {api: {networks: [n]}, db: {networks: [n]}}\n"
+            "x-deploywitness: {required_network_links: [{from: api, to: db}]}",
+            "services: {api: {networks: [n]}, db: {networks: [n]}}\n"
+            "x-deploywitness: {required_network_links: []}",
+            "UNKNOWN",
+        ),
     ],
 )
 def test_independent_confidence_scenarios(

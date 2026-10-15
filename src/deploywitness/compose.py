@@ -98,6 +98,7 @@ def _lines(node: Node) -> dict[str, int]:
                     for field_key, field_node in service_node.value:
                         lines[f"{name}.{field_key.value}"] = field_node.start_mark.line + 1
         if key.value == "x-deploywitness" and isinstance(value, MappingNode):
+            lines["__contracts__"] = value.start_mark.line + 1
             for contract_key, contract_value in value.value:
                 lines[f"__contract__.{contract_key.value}"] = contract_value.start_mark.line + 1
     return lines

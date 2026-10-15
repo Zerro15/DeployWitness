@@ -120,6 +120,31 @@ def compare(base_path: Path, head_path: Path) -> list[Witness]:
     contract_drift = head.contracts_present and head.contracts != base.contracts
     findings: list[Witness] = []
     base_links = _all_links(base)
+    if contract_drift:
+        changed_sections = sorted(
+            key
+            for key in base.contracts.keys() | head.contracts.keys()
+            if base.contracts.get(key) != head.contracts.get(key)
+        )
+        contract_sources = tuple(
+            SourceRef(str(model.path), model.lines.get("__contracts__", 1))
+            for model in (base, head)
+            if model.contracts_present
+        )
+        findings.append(
+            _witness(
+                "COMPOSE_CONTRACT_CHANGED",
+                "UNKNOWN",
+                "x-deploywitness",
+                "Contract declarations differ between baseline and candidate",
+                {"present": base.contracts_present, "changed_sections": changed_sections},
+                {"present": head.contracts_present},
+                "Contract changes require review before they can justify or suppress proof",
+                contract_sources,
+                "Review the contract edit and rerun the comparison against the intended invariant",
+                {"operator": "contract_declarations_equal", "expected": False},
+            )
+        )
 
     for model, label in ((base, "baseline"), (head, "candidate")):
         for service in model.services.values():
