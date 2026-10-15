@@ -21,6 +21,18 @@ deploywitness check --base examples/before/compose.yaml --head examples/after/co
 
 The sample produces `PROVEN_CONFIG_BREAK` because the baseline explicitly requires a shared network and the candidate removes that relationship. This proves a static configuration contract violation, not a runtime outage.
 
+## Install from a GitHub Release
+
+After `v0.1.0a1` is published, open the [GitHub Releases page](https://github.com/Zerro15/DeployWitness/releases) and download `deploywitness-0.1.0a1-py3-none-any.whl` and `SHA256SUMS.txt`. Verify the wheel before installing it:
+
+```bash
+sha256sum -c SHA256SUMS.txt
+python -m pip install ./deploywitness-0.1.0a1-py3-none-any.whl
+deploywitness version
+```
+
+On Windows PowerShell, compare `(Get-FileHash .\deploywitness-0.1.0a1-py3-none-any.whl -Algorithm SHA256).Hash` with the wheel's entry in `SHA256SUMS.txt`, then install it with `python -m pip install .\deploywitness-0.1.0a1-py3-none-any.whl`. The wheel is preferred; the `.tar.gz` source distribution is also attached for environments that need it. Installing dependencies may contact PyPI. The analysis itself does not make network requests. These release assets are not available until a maintainer publishes the GitHub pre-release; there is no PyPI installation command for this version.
+
 ## Scan one configuration
 
 ```bash

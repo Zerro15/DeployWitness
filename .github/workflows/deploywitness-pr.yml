@@ -1,0 +1,74 @@
+name: DeployWitness PR analysis
+
+on:
+  workflow_call:
+    inputs:
+      deploywitness_ref:
+        description: Full reviewed DeployWitness commit SHA to run
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  compose-analysis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # Check out the target repository's trusted base only. The PR head is fetched
+      # as Git data and is never checked out or executed.
+      - name: Check out target repository base
+        id: checkout-target
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: target
+          fetch-depth: 1
+          persist-credentials: true
+
+      - name: Validate DeployWitness source pin
+        env:
+          DEPLOYWITNESS_REF: ${{ inputs.deploywitness_ref }}
+        run: |
+          if [[ ! "$DEPLOYWITNESS_REF" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "deploywitness_ref must be a full 40-character commit SHA" >&2
+            exit 1
+          fi
+
+      - name: Check out DeployWitness source
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          repository: Zerro15/DeployWitness
+          ref: ${{ inputs.deploywitness_ref }}
+          path: tools/deploywitness
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: "3.12"
+
+      - name: Install trusted DeployWitness
+        run: python -m pip install ./tools/deploywitness
+
+      - name: Fetch pull request head as data
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        working-directory: target
+        run: git fetch --depth=1 --no-tags origin "refs/pull/${PR_NUMBER}/head"
+
+      - name: Analyze changed Compose files
+        env:
+          DEPLOYWITNESS_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          DEPLOYWITNESS_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          DEPLOYWITNESS_PR_NUMBER: ${{ github.event.pull_request.number }}
+        working-directory: target
+        run: python ../tools/deploywitness/scripts/github_pr_check.py
+
+      - name: Remove checkout credential
+        if: always() && steps.checkout-target.outcome == 'success'
+        working-directory: target
+        run: git config --local --unset-all http.https://github.com/.extraheader || true

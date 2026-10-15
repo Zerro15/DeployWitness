@@ -21,6 +21,18 @@ deploywitness check --base examples/before/compose.yaml --head examples/after/co
 
 Пример выдаёт `PROVEN_CONFIG_BREAK`, потому что в базовой конфигурации явно требуется общая сеть, а в кандидате эта связь удалена. Это доказывает статическое нарушение конфигурационного контракта, но не аварию во время работы.
 
+## Установка из GitHub Release
+
+После публикации `v0.1.0a1` откройте [страницу GitHub Releases](https://github.com/Zerro15/DeployWitness/releases) и скачайте `deploywitness-0.1.0a1-py3-none-any.whl` и `SHA256SUMS.txt`. Перед установкой проверьте контрольную сумму wheel:
+
+```bash
+sha256sum -c SHA256SUMS.txt
+python -m pip install ./deploywitness-0.1.0a1-py3-none-any.whl
+deploywitness version
+```
+
+В Windows PowerShell сравните `(Get-FileHash .\deploywitness-0.1.0a1-py3-none-any.whl -Algorithm SHA256).Hash` со значением wheel в `SHA256SUMS.txt`, затем выполните `python -m pip install .\deploywitness-0.1.0a1-py3-none-any.whl`. Предпочтителен wheel; для окружений, которым он не подходит, также будет приложен исходный архив `.tar.gz`. При установке зависимостей может понадобиться доступ к PyPI. Сам анализ сетевых запросов не выполняет. Эти файлы появятся только после публикации GitHub pre-release сопровождающим; этой версии в PyPI нет.
+
 ## Просканировать одну конфигурацию
 
 ```bash

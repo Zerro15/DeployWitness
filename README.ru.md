@@ -97,7 +97,7 @@ x-deploywitness:
 
 ## CI-интеграции
 
-В репозитории есть [пример GitHub Actions](.github/workflows/example-check.yml), который запускается на runner владельца репозитория с правом `contents: read`. Текущие примеры GitHub, GitLab и Forgejo сравнивают явно заданные файлы. **Автоматическое получение base/head для PR и опубликованного GitHub Action пока нет.** См. [примеры интеграций](docs/ru/CI_INTEGRATIONS.md).
+Для GitHub можно подключить [reusable workflow для PR](docs/ru/CI_INTEGRATIONS.md): он сравнивает Compose base/head и публикует Markdown summary на runner владельца репозитория. Нужен только contents: read; код PR не запускается, аккаунт DeployWitness и backend не нужны. Риск остаётся предупреждением, а доказанное нарушение и неполный анализ имеют отдельные статусы.
 
 ## Документация
 

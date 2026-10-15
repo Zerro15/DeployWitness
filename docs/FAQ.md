@@ -32,7 +32,7 @@ No. Analysis is local and makes no network calls. Python package installation ma
 
 ### Is there a ready-made PR checker or published package?
 
-Not yet. The package is not published to PyPI. The GitHub workflow is a manually dispatched example using fixed repository files; it does not fetch PR base/head automatically.
+The reusable GitHub Actions workflow can compare PR base/head and publish a Markdown job summary on your runner. The package is not published to PyPI yet. See [CI integrations](INTEGRATIONS.md) for setup and current limits.
 
 ### What does `NO_FINDING` mean?
 

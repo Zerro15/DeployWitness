@@ -28,6 +28,8 @@ These conditions return `UNKNOWN` or make the effective model unavailable:
 - YAML merge keys.
 - `env_file`, configs, secrets, legacy `links`, and `volumes_from`.
 - Host port publishing (`ports`/`expose`), conditional `depends_on`, advanced long-form mount options, and top-level named-volume driver/name options.
+- Inputs larger than 1 MB per file or changes involving more than 50 recognized Compose files.
+- In GitHub PR checks, a changed `.env` or other YAML file alongside a standard Compose file returns `UNKNOWN`; auxiliary inputs are not merged or rendered.
 
 The analyzer never executes Compose commands, shell, application code, or plugins. Provide reviewed files representing the effective base and candidate configurations. Bind paths and network names may appear in reports, so review them before sharing.
 
