@@ -31,3 +31,8 @@ def test_reusable_workflow_uses_read_only_permissions_and_not_privileged_pr_even
     assert re.search(r"^permissions:\s*\n\s+contents: read\s*$", workflow, re.MULTILINE)
     assert "pull_request_target" not in workflow
     assert "persist-credentials: false" in workflow
+
+
+def test_reusable_workflow_bounds_runner_time() -> None:
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+    assert re.search(r"^\s+timeout-minutes:\s*10\s*$", workflow, re.MULTILINE)

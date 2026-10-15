@@ -14,6 +14,7 @@ permissions:
 jobs:
   compose-analysis:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       # Check out the target repository's trusted base only. The PR head is fetched
       # as Git data and is never checked out or executed.
