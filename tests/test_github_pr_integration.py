@@ -206,6 +206,23 @@ def test_excessive_changed_compose_files_are_unknown(
     assert "more than 50 Compose files changed" in summary
 
 
+@pytest.mark.parametrize("path", [b".env", b"include.yaml", b"docker-compose.prod.yml"])
+def test_unresolved_auxiliary_config_next_to_compose_is_unknown(
+    monkeypatch: pytest.MonkeyPatch, path: bytes
+) -> None:
+    summary, status = _run_analysis(
+        monkeypatch,
+        [path],
+        {
+            (BASE, "compose.yaml"): CONTRACT,
+            (HEAD, "compose.yaml"): CONTRACT,
+        },
+    )
+    assert status == 3
+    assert "auxiliary YAML or environment file changed" in summary
+    assert "NO_FINDING" not in summary
+
+
 @pytest.mark.parametrize(("fetched", "expected"), [(HEAD, True), (BASE, False)])
 def test_post_analysis_head_check_detects_a_pr_update(
     monkeypatch: pytest.MonkeyPatch, fetched: str, expected: bool

@@ -57,6 +57,24 @@ def _compose_path(raw_path: bytes) -> str | None:
     return path
 
 
+def _is_unresolved_compose_input(raw_path: bytes) -> bool:
+    try:
+        path = raw_path.decode("utf-8")
+    except UnicodeDecodeError:
+        return False
+    pure = PurePosixPath(path)
+    return (
+        "\\" not in path
+        and not pure.is_absolute()
+        and not any(part in {"", ".", ".."} for part in path.split("/"))
+        and (
+            pure.name.lower().endswith((".yaml", ".yml"))
+            or pure.name == ".env"
+            or pure.name.startswith(".env.")
+        )
+    )
+
+
 def _compose_files(commit: str, parent: str) -> set[str]:
     args = ["ls-tree", "-r", "--name-only", "-z", commit]
     args.extend(["--", "." if parent == "." else f":(literal){parent}"])
@@ -184,6 +202,30 @@ def analyze(base: str, head: str) -> tuple[str, int]:
         for raw in raw_paths
         if (candidate := _compose_path(raw)) is not None
     )
+    unresolved_inputs = [
+        raw
+        for raw in raw_paths
+        if _compose_path(raw) is None and _is_unresolved_compose_input(raw)
+    ]
+    for raw in unresolved_inputs:
+        path = raw.decode("utf-8")
+        parent = str(PurePosixPath(path).parent)
+        try:
+            has_compose_file = bool(_compose_files(base, parent) | _compose_files(head, parent))
+        except IntegrationError:
+            return (
+                "# DeployWitness pull request report\n\n"
+                "**UNKNOWN** — changed auxiliary configuration could not be checked against "
+                "Compose files in its directory.\n",
+                3,
+            )
+        if has_compose_file:
+            return (
+                "# DeployWitness pull request report\n\n"
+                "**UNKNOWN** — an auxiliary YAML or environment file changed next to a "
+                "Compose file, but its effect is not resolved.\n",
+                3,
+            )
     if len(paths) > MAX_CHANGED_COMPOSE_FILES:
         return (
             "# DeployWitness pull request report\n\n"

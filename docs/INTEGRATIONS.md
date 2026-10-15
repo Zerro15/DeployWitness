@@ -34,7 +34,7 @@ To try it, add the workflow under `.github/workflows/deploywitness.yml`, open a 
 
 Open the repository's **Actions** tab, select the **DeployWitness** run for your pull request, and read the **workflow run summary**. The Markdown report is shown there under the job summary. Open the job itself only when you need step logs; DeployWitness does not post a pull request comment.
 
-`PROVEN_CONFIG_BREAK` fails the check. `POTENTIAL_RISK` is advisory. `UNKNOWN` fails visibly as inconclusive. A clean result means only that implemented checks found no issue. Added/deleted Compose files, multiple Compose files in the same directory, unsupported features, or oversized inputs are reported as `UNKNOWN`.
+`PROVEN_CONFIG_BREAK` fails the check. `POTENTIAL_RISK` is advisory. `UNKNOWN` fails visibly as inconclusive. A clean result means only that implemented checks found no issue. Added/deleted Compose files, multiple Compose files in the same directory, changed `.env` or other adjacent YAML inputs, unsupported features, or oversized inputs are reported as `UNKNOWN`.
 
 The [manual example workflow](../.github/workflows/example-check.yml) remains available for trying the CLI against the repository's fixed examples.
 
