@@ -10,7 +10,7 @@ def render(findings: list[Witness], fmt: str) -> str:
         return json.dumps({"schema_version": "1", "result": "NO_FINDING" if not findings else
                            "FINDINGS", "findings": [w.to_dict() for w in findings]}, indent=2)
     if not findings:
-        return "NO_FINDING — no issue found among checked rules; this is not a safety guarantee."
+        return "NO_FINDING - no issue found among checked rules; this is not a safety guarantee."
     if fmt == "markdown":
         rows = ["# DeployWitness report", "", "Static Compose change analysis.", ""]
         for w in findings:

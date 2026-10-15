@@ -28,6 +28,7 @@ class Service:
     networks: frozenset[str]
     mounts: tuple[Mount, ...]
     environment_keys: frozenset[str]
+    environment_digests: dict[str, str]
     depends_on: frozenset[str]
     profile: bool
 

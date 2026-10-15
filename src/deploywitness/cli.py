@@ -29,7 +29,7 @@ def main(argv: list[str] | None = None) -> int:
         print(__version__)
         return 0
     if args.command == "rules":
-        print("COMPOSE_NETWORK_LINK\nCOMPOSE_VOLUME_MOUNT\nCOMPOSE_ENV_KEY")
+        print("COMPOSE_NETWORK_LINK\nCOMPOSE_VOLUME_MOUNT\nCOMPOSE_ENV_KEY\nCOMPOSE_ENV_VALUE")
         return 0
     try:
         if args.command == "scan":
@@ -40,10 +40,10 @@ def main(argv: list[str] | None = None) -> int:
             model = load_compose(candidates[0])
             print(f"Discovered {model.path}: {len(model.services)} services")
             if model.unresolved:
-                print("UNKNOWN — interpolation, profiles, include or extends "
+                print("UNKNOWN - interpolation, profiles, include or extends "
                       "need explicit resolution")
                 return 3
-            print("NO_FINDING — scan has no base state; use check for change analysis")
+            print("NO_FINDING - scan has no base state; use check for change analysis")
             return 0
         findings = compare(args.base, args.head)
         print(render(findings, args.format))

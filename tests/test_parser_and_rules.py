@@ -50,6 +50,21 @@ def test_environment_value_change_is_not_reported(tmp_path: Path) -> None:
     assert compare(before, after) == []
 
 
+def test_significant_environment_value_change_is_risk_without_leak(tmp_path: Path) -> None:
+    before = write(tmp_path, "old.yaml", """services:
+  api:
+    environment: {TOKEN: secret1}
+x-deploywitness:
+  required_environment: {api: [TOKEN]}
+""")
+    after = write(tmp_path, "new.yaml", "services:\n  api:\n    environment: {TOKEN: secret2}\n")
+    finding = compare(before, after)[0]
+    assert finding.rule_id == "COMPOSE_ENV_VALUE"
+    assert finding.status == "POTENTIAL_RISK"
+    assert "secret1" not in str(finding.to_dict())
+    assert "secret2" not in str(finding.to_dict())
+
+
 def test_required_environment_key_removed_without_leaking_value(tmp_path: Path) -> None:
     before = write(tmp_path, "old.yaml", """services:
   api:
@@ -107,3 +122,10 @@ def test_rejects_bad_or_oversized_yaml(tmp_path: Path) -> None:
 def test_rejects_alias_cycle(tmp_path: Path) -> None:
     with pytest.raises(InputError):
         load_compose(write(tmp_path, "cycle.yaml", "services: &a {api: *a}"))
+
+
+def test_rejects_duplicate_keys_and_unsafe_tag(tmp_path: Path) -> None:
+    with pytest.raises(InputError):
+        load_compose(write(tmp_path, "duplicate.yaml", "services:\n  api: {}\n  api: {}\n"))
+    with pytest.raises(InputError):
+        load_compose(write(tmp_path, "tag.yaml", "services: !!python/object/apply:os.system []"))

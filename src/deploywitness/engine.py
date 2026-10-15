@@ -110,6 +110,18 @@ def compare(base_path: Path, head_path: Path) -> list[Witness]:
                 {"operator": "environment_key_present", "service": name, "key": key,
                  "base_expected": True, "head_expected": False},
             ))
+        for key in sorted(old.environment_keys & new.environment_keys):
+            if (old.environment_digests[key] != new.environment_digests[key]
+                    and _required(base, "required_environment", name, key)):
+                findings.append(_witness(
+                    "COMPOSE_ENV_VALUE", "UNKNOWN" if unresolved else "POTENTIAL_RISK",
+                    f"{name}:{key}", "Significant environment value changed",
+                    {"key_present": key}, {"value_changed": True},
+                    "Key presence is required; no exact value contract declared",
+                    (_ref(base, name, "environment"), _ref(head, name, "environment")),
+                    f"Review the intended value of {key} without sharing secrets in reports",
+                    {"operator": "environment_value_changed", "service": name, "key": key},
+                ))
     return findings
 
 

@@ -1,5 +1,6 @@
 """Conservative Compose subset parser. Unsupported resolution never yields proof."""
 
+import hashlib
 import re
 from pathlib import Path
 from typing import Any
@@ -17,6 +18,38 @@ VARIABLE = re.compile(r"\$\{[^}]+\}")
 
 class InputError(ValueError):
     """Invalid or unsupported input."""
+
+
+class BoundedLoader(yaml.SafeLoader):
+    """Reject expensive input before object construction completes."""
+
+    def __init__(self, stream: str) -> None:
+        super().__init__(stream)
+        self.node_count = 0
+        self.node_depth = 0
+
+    def compose_node(self, parent: Node | None, index: Any) -> Node | None:
+        self.node_count += 1
+        self.node_depth += 1
+        if self.node_count > MAX_NODES or self.node_depth > MAX_DEPTH:
+            raise InputError("YAML complexity exceeds limit")
+        try:
+            return super().compose_node(parent, index)
+        finally:
+            self.node_depth -= 1
+
+    def construct_mapping(self, node: MappingNode, deep: bool = False) -> dict[Any, Any]:
+        result: dict[Any, Any] = {}
+        for key_node, value_node in node.value:
+            key = self.construct_object(key_node, deep=deep)
+            try:
+                duplicate = key in result
+            except TypeError as exc:
+                raise InputError("Invalid YAML mapping key") from exc
+            if duplicate:
+                raise InputError("Duplicate YAML mapping key")
+            result[key] = self.construct_object(value_node, deep=deep)
+        return result
 
 
 def _check_tree(value: Any, seen: set[int], depth: int = 0) -> None:
@@ -84,8 +117,8 @@ def load_compose(path: Path) -> ComposeModel:
         raise InputError("Compose file exceeds size limit")
     try:
         content = raw.decode("utf-8")
-        doc = yaml.safe_load(content)
-        node = yaml.compose(content, Loader=yaml.SafeLoader)
+        doc = yaml.load(content, Loader=BoundedLoader)
+        node = yaml.compose(content, Loader=BoundedLoader)
     except (UnicodeError, yaml.YAMLError, RecursionError) as exc:
         raise InputError("Invalid or overly complex YAML") from exc
     if not isinstance(doc, dict) or not isinstance(doc.get("services"), dict) or node is None:
@@ -101,16 +134,21 @@ def load_compose(path: Path) -> ComposeModel:
         depends = _names(data.get("depends_on", []), "depends_on")
         env = data.get("environment", {})
         if isinstance(env, list):
-            env_keys = frozenset(item.split("=", 1)[0] for item in env if isinstance(item, str))
+            if not all(isinstance(item, str) for item in env):
+                raise InputError("Invalid environment")
+            env_values = {item.split("=", 1)[0]: item.partition("=")[2] for item in env}
         elif isinstance(env, dict):
-            env_keys = frozenset(str(key) for key in env)
+            env_values = {str(key): str(value) for key, value in env.items()}
         else:
             raise InputError("Invalid environment")
+        env_keys = frozenset(env_values)
+        env_digests = {key: hashlib.sha256(value.encode("utf-8")).hexdigest()
+                       for key, value in env_values.items()}
         volumes = data.get("volumes", [])
         if not isinstance(volumes, list):
             raise InputError("Invalid volumes")
         services[name] = Service(name, networks, tuple(_mount(v) for v in volumes), env_keys,
-                                 depends, bool(data.get("profiles")))
+                                 env_digests, depends, bool(data.get("profiles")))
     contracts = doc.get("x-deploywitness", {})
     if not isinstance(contracts, dict):
         raise InputError("x-deploywitness must be a mapping")

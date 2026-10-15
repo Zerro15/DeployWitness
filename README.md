@@ -43,7 +43,7 @@ x-deploywitness:
     api: [DATABASE_URL]
 ```
 
-Current rules detect a lost shared network for a `depends_on` pair, changed or removed mounts, and removed environment keys. `depends_on` alone is only a discovery hint, never proof of required connectivity. Mount changes do not prove data loss. Environment values are never included in reports. JSON and Markdown output are available with `--format`.
+Current rules detect a lost shared network for a declared link or `depends_on` pair, changed or removed mounts, removed environment keys, and changed values for keys marked significant by `required_environment`. `depends_on` alone is only a discovery hint, never proof of required connectivity. Mount changes do not prove data loss. A changed value without an exact value contract is a risk. Environment values and their digests are never included in reports. JSON and Markdown output are available with `--format`.
 
 Unresolved interpolation, profiles, `include`, and `extends` downgrade potential proofs to `UNKNOWN`. Multi-file overrides are not merged in this alpha version. Pass already resolved, reviewed files for meaningful comparisons; do not resolve untrusted Compose files by executing them. Docker and a Docker socket are not required.
 
