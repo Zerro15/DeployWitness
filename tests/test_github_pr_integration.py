@@ -187,6 +187,60 @@ def test_markdown_strings_cannot_inject_new_headings() -> None:
     assert "\\<script\\>" in rendered
 
 
+def test_non_utf8_compose_path_is_unknown_instead_of_ignored(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    summary, status = _run_analysis(monkeypatch, [b"odd-\xff-directory/compose.yaml"], {})
+    assert status == 3
+    assert "UNKNOWN" in summary
+    assert "path that cannot be safely represented as UTF-8" in summary
+    assert "NO_FINDING" not in summary
+
+
+def test_excessive_changed_compose_files_are_unknown(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    paths = [f"service-{index}/compose.yaml".encode("ascii") for index in range(51)]
+    summary, status = _run_analysis(monkeypatch, paths, {})
+    assert status == 3
+    assert "more than 50 Compose files changed" in summary
+
+
+@pytest.mark.parametrize(("fetched", "expected"), [(HEAD, True), (BASE, False)])
+def test_post_analysis_head_check_detects_a_pr_update(
+    monkeypatch: pytest.MonkeyPatch, fetched: str, expected: bool
+) -> None:
+    calls: list[tuple[str, ...]] = []
+
+    def fake_git(*args: str) -> bytes:
+        calls.append(args)
+        if args[0] == "fetch":
+            return b""
+        assert args == ("rev-parse", "FETCH_HEAD")
+        return fetched.encode("ascii")
+
+    monkeypatch.setattr(github_pr_check, "_git", fake_git)
+    assert github_pr_check._head_is_current("42", HEAD) is expected
+    assert calls[0] == ("fetch", "--depth=1", "--no-tags", "origin", "refs/pull/42/head")
+
+
+def test_head_update_during_analysis_overrides_a_stale_proof(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    monkeypatch.setattr(github_pr_check, "_git", lambda *_args: HEAD.encode("ascii"))
+    monkeypatch.setattr(github_pr_check, "analyze", lambda *_args: ("PROVEN_CONFIG_BREAK\n", 2))
+    monkeypatch.setattr(github_pr_check, "_head_is_current", lambda *_args: False)
+    monkeypatch.setenv("DEPLOYWITNESS_BASE_SHA", BASE)
+    monkeypatch.setenv("DEPLOYWITNESS_HEAD_SHA", HEAD)
+    monkeypatch.setenv("DEPLOYWITNESS_PR_NUMBER", "42")
+    summary_path = tmp_path / "summary.md"
+    monkeypatch.setenv("GITHUB_STEP_SUMMARY", str(summary_path))
+
+    assert github_pr_check.main() == 3
+    assert "UNKNOWN" in capsys.readouterr().out
+    assert "PROVEN_CONFIG_BREAK" not in summary_path.read_text(encoding="utf-8")
+
+
 def test_script_reads_real_base_and_head_git_objects(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
@@ -218,7 +272,11 @@ def test_script_reads_real_base_and_head_git_objects(
     monkeypatch.chdir(repo)
     monkeypatch.setenv("DEPLOYWITNESS_BASE_SHA", base)
     monkeypatch.setenv("DEPLOYWITNESS_HEAD_SHA", head)
+    monkeypatch.setenv("DEPLOYWITNESS_PR_NUMBER", "42")
     monkeypatch.setenv("GITHUB_STEP_SUMMARY", str(summary_file))
+    monkeypatch.setattr(
+        github_pr_check, "_head_is_current", lambda _number, expected: expected == head
+    )
     assert github_pr_check.main() == 2
     summary = summary_file.read_text(encoding="utf-8")
     assert "PROVEN_CONFIG_BREAK" in summary

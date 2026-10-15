@@ -16,6 +16,8 @@ English documentation is the source of truth. Russian pages are maintained in [`
 
 - [Architecture](ARCHITECTURE.md)
 - [CI integrations](INTEGRATIONS.md)
+- [Alpha release checklist and draft notes](ALPHA_RELEASE_CHECKLIST.md)
+- [Upgrade guide](UPGRADING.md)
 - [Security architecture](SECURITY_ARCHITECTURE.md) · [security overview](SECURITY.md)
 - [Competitive analysis](COMPETITIVE_ANALYSIS.md)
 - [Release strategy](RELEASING.md)

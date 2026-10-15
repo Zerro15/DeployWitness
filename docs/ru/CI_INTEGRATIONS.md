@@ -6,7 +6,9 @@
 
 ## GitHub Actions
 
-DeployWitness предоставляет reusable workflow, который сравнивает base и head PR на GitHub-hosted runner владельца репозитория. Добавьте workflow:
+Анализ выполняется на GitHub-hosted runner владельца репозитория. Сам workflow и исходный код анализатора должны быть закреплены за одним проверенным полным SHA DeployWitness длиной 40 символов; имена веток вроде `main` в параметре анализатора отклоняются.
+
+Добавьте файл `.github/workflows/deploywitness.yml`:
 
 ```yaml
 name: DeployWitness
@@ -19,18 +21,22 @@ permissions:
 
 jobs:
   compose-analysis:
-    uses: Zerro15/DeployWitness/.github/workflows/deploywitness-pr.yml@main
+    uses: Zerro15/DeployWitness/.github/workflows/deploywitness-pr.yml@REPLACE_WITH_REVIEWED_40_CHARACTER_SHA
     with:
-      deploywitness_ref: main
+      deploywitness_ref: REPLACE_WITH_THE_SAME_SHA
 ```
 
-Для постоянного использования замените оба значения `@main` и `deploywitness_ref: main` одним и тем же проверенным SHA DeployWitness. Workflow отдельно получает базовую ревизию репозитория и исходный код DeployWitness, загружает head PR только как Git-данные и помещает Markdown-отчёт в summary запуска Actions. Код PR не checkout-ится и не выполняется; комментарии в PR и передача конфигурации на сервер DeployWitness не используются.
+Перед коммитом замените оба примера одним и тем же проверенным SHA длиной 40 символов. Возьмите его из просмотренного коммита DeployWitness или опубликованного релиза. Reusable workflow отдельно получает базовую ревизию репозитория и DeployWitness, загружает head PR только как Git-данные и помещает Markdown-отчёт в summary запуска Actions. Код PR не checkout-ится и не выполняется; комментарии в PR и передача конфигурации на сервер DeployWitness не используются. Зависимости GitHub Actions в workflow также закреплены полными SHA.
+
+Вызывающему workflow достаточно `contents: read`. Он запускается на событии `pull_request`, поэтому PR из fork использует read-only token GitHub без секретов; настоящий запуск для fork в этой alpha пока не проверен. GitHub может потребовать одобрить запуск workflow от нового участника.
+
+После установки откройте PR с изменением поддерживаемого файла Compose (`compose.yaml`, `compose.yml`, `docker-compose.yaml` или `docker-compose.yml`) и проверьте запуск в Actions. Для безопасной правки ожидается `NO_FINDING`; удаление связи без явного контракта даёт только предупреждение; неподдерживаемый или неполный вход даёт `UNKNOWN` и завершает проверку ошибкой. Полная таблица входов — в разделе [поддерживаемых возможностей Compose](SUPPORTED_COMPOSE_FEATURES.md).
 
 ### Где найти отчёт
 
 Откройте вкладку репозитория **Actions**, выберите запуск **DeployWitness**, связанный с нужным PR, и прочитайте **сводку запуска workflow (workflow run summary)**. Markdown-отчёт находится в сводке задания. Откройте само задание, если нужны логи шагов. DeployWitness не публикует комментарий в PR.
 
-PROVEN_CONFIG_BREAK завершает проверку ошибкой. POTENTIAL_RISK остаётся предупреждением. UNKNOWN явно обозначает неполный анализ и также завершает проверку ошибкой. Чистый результат означает только отсутствие проблем среди реализованных правил. Добавленные или удалённые Compose-файлы, несколько Compose-файлов в одной директории, неподдерживаемые возможности и слишком большие файлы дают UNKNOWN.
+`PROVEN_CONFIG_BREAK` завершает проверку ошибкой. `POTENTIAL_RISK` остаётся предупреждением. `UNKNOWN` явно обозначает неполный анализ и также завершает проверку ошибкой. Чистый результат означает только отсутствие проблем среди реализованных правил. Добавленные или удалённые Compose-файлы, несколько Compose-файлов в одной директории, неподдерживаемые возможности и слишком большие файлы дают `UNKNOWN`.
 
 [Ручной пример workflow](../../.github/workflows/example-check.yml) по-прежнему доступен для запуска CLI на фиксированных примерах репозитория.
 

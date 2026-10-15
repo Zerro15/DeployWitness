@@ -26,6 +26,8 @@ COMPOSE_NAMES = {
     "docker-compose.override.yml",
 }
 SHA_PATTERN = re.compile(r"^[0-9a-f]{40}$")
+COMPOSE_NAME_BYTES = {name.encode("ascii") for name in COMPOSE_NAMES}
+MAX_CHANGED_COMPOSE_FILES = 50
 
 
 class IntegrationError(Exception):
@@ -92,6 +94,17 @@ def _blob(commit: str, path: str) -> bytes | None:
     return result.stdout
 
 
+def _head_is_current(pr_number: str, expected_head: str) -> bool:
+    if not pr_number.isascii() or not pr_number.isdecimal():
+        return False
+    try:
+        _git("fetch", "--depth=1", "--no-tags", "origin", f"refs/pull/{pr_number}/head")
+        current_head = _git("rev-parse", "FETCH_HEAD").decode("ascii").strip()
+    except (IntegrationError, UnicodeDecodeError):
+        return False
+    return current_head == expected_head
+
+
 def _markdown_text(value: str) -> str:
     """Escape untrusted configuration strings before placing them in a GitHub summary."""
     escaped = value.replace("\\", "\\\\")
@@ -151,11 +164,33 @@ def analyze(base: str, head: str) -> tuple[str, int]:
         raise IntegrationError("Base and head must be full commit SHAs")
 
     raw_names = _git("diff", "--no-renames", "--name-only", "-z", base, head, "--")
+    raw_paths = [raw for raw in raw_names.split(b"\0") if raw]
+    # Git permits non-UTF-8 path bytes. If such a path ends in a standard Compose
+    # filename, do not silently omit it and turn an incomplete scan into a clean exit.
+    invalid_compose_paths = [
+        raw for raw in raw_paths if raw.rsplit(b"/", 1)[-1] in COMPOSE_NAME_BYTES
+        and _compose_path(raw) is None
+    ]
+    if invalid_compose_paths:
+        return (
+            "# DeployWitness pull request report\n\n"
+            "**UNKNOWN** — a changed Compose file has a path that cannot be safely "
+            "represented as UTF-8. No safety conclusion was made.\n",
+            3,
+        )
+
     paths = sorted(
         candidate
-        for raw in raw_names.split(b"\0")
-        if raw and (candidate := _compose_path(raw)) is not None
+        for raw in raw_paths
+        if (candidate := _compose_path(raw)) is not None
     )
+    if len(paths) > MAX_CHANGED_COMPOSE_FILES:
+        return (
+            "# DeployWitness pull request report\n\n"
+            f"**UNKNOWN** — more than {MAX_CHANGED_COMPOSE_FILES} Compose files changed; "
+            "the analysis limit was exceeded.\n",
+            3,
+        )
     if not paths:
         return (
             "# DeployWitness pull request report\n\n"
@@ -270,6 +305,14 @@ def main() -> int:
         if actual_head != head:
             raise IntegrationError("Pull request head changed during this run; rerun the check")
         report, status = analyze(base, head)
+        pr_number = os.environ.get("DEPLOYWITNESS_PR_NUMBER", "")
+        if not _head_is_current(pr_number, head):
+            report = (
+                "# DeployWitness pull request report\n\n"
+                "**UNKNOWN** — the pull request head changed during analysis or could not be "
+                "re-verified. Rerun the check; no safety conclusion was made.\n"
+            )
+            status = 3
     except IntegrationError as exc:
         report = (
             "# DeployWitness pull request report\n\n"

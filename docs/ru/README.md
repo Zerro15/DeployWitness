@@ -16,6 +16,8 @@
 
 - [Архитектура](ARCHITECTURE.md)
 - [CI-интеграции](CI_INTEGRATIONS.md)
+- [Подготовка alpha-релиза и checklist](../ALPHA_RELEASE_CHECKLIST.md)
+- [Обновление DeployWitness](UPGRADING.md)
 - [Безопасность](SECURITY.md) · [Модель угроз](SECURITY_ARCHITECTURE.md)
 - [Дорожная карта](../../ROADMAP.md)
 - [Участие в проекте](../../CONTRIBUTING.md)
