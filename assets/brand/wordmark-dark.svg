@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="620" height="144" viewBox="0 0 620 144" role="img" aria-labelledby="title">
+  <title id="title">DeployWitness — Know what breaks before you deploy.</title>
+  <rect width="620" height="144" rx="20" fill="#0B1120"/>
+  <g transform="translate(28 40) scale(1)">
+    <rect width="64" height="64" rx="16" fill="#131E2C"/>
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 20h11M37 20h11M16 44h11M37 44h11M20 24v16M44 24v16" stroke="#426075" stroke-width="2.5"/>
+      <path d="M20 20h9m6 0h9M20 44h9m6 0h9" stroke="#4CE0CB" stroke-width="3"/>
+      <circle cx="15" cy="20" r="4" fill="#4CE0CB" stroke="none"/><circle cx="49" cy="20" r="4" fill="#4CE0CB" stroke="none"/>
+      <circle cx="15" cy="44" r="4" fill="#9BB0C4" stroke="none"/><circle cx="49" cy="44" r="4" fill="#9BB0C4" stroke="none"/>
+      <circle cx="32" cy="20" r="5" fill="#131E2C" stroke="#F4B86D" stroke-width="2.5"/>
+      <circle cx="32" cy="44" r="5" fill="#131E2C" stroke="#4CE0CB" stroke-width="2.5"/>
+      <path d="M30 44l1.5 1.5L34.5 42" stroke="#131E2C" stroke-width="1.8"/>
+    </g>
+  </g>
+  <text x="116" y="86" fill="#F3F7FA" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="42" font-weight="700" letter-spacing="-1.4">Deploy<tspan fill="#4CE0CB">Witness</tspan></text>
+  <text x="118" y="113" fill="#9BB0C4" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="15" letter-spacing=".15">Know what breaks before you deploy.</text>
+</svg>

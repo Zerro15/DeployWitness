@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="246" viewBox="0 0 1080 246" role="img" aria-labelledby="title desc">
+  <title id="title">DeployWitness local analysis flow</title><desc id="desc">Two reviewed Compose files are parsed into facts, compared with declared contracts, and turned into terminal, JSON, or Markdown reports. The process runs on the user's machine or CI runner.</desc>
+  <rect width="1080" height="246" rx="18" fill="#0B1120"/>
+  <text x="28" y="35" fill="#9BB0C4" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="1.4">RUNS LOCALLY · NO BACKEND · NO TELEMETRY</text>
+  <g font-family="Inter,Segoe UI,Arial,sans-serif" text-anchor="middle">
+    <g transform="translate(28 70)"><rect width="190" height="124" rx="14" fill="#131E2C" stroke="#344A5C"/><text x="95" y="37" fill="#4CE0CB" font-size="13" font-weight="700">INPUT</text><text x="95" y="67" fill="#F3F7FA" font-size="16" font-weight="600">Base + candidate</text><text x="95" y="91" fill="#9BB0C4" font-size="13">Compose YAML</text></g>
+    <path d="M229 132h40m-9-8l9 8-9 8" fill="none" stroke="#4CE0CB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <g transform="translate(278 70)"><rect width="190" height="124" rx="14" fill="#131E2C" stroke="#344A5C"/><text x="95" y="37" fill="#4CE0CB" font-size="13" font-weight="700">PARSE</text><text x="95" y="67" fill="#F3F7FA" font-size="16" font-weight="600">Bounded YAML</text><text x="95" y="91" fill="#9BB0C4" font-size="13">No command execution</text></g>
+    <path d="M479 132h40m-9-8l9 8-9 8" fill="none" stroke="#4CE0CB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <g transform="translate(528 70)"><rect width="210" height="124" rx="14" fill="#131E2C" stroke="#80603A"/><text x="105" y="37" fill="#F4B86D" font-size="13" font-weight="700">COMPARE</text><text x="105" y="67" fill="#F3F7FA" font-size="16" font-weight="600">Facts + contracts</text><text x="105" y="91" fill="#9BB0C4" font-size="13">Recomputed witness</text></g>
+    <path d="M749 132h40m-9-8l9 8-9 8" fill="none" stroke="#4CE0CB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <g transform="translate(798 70)"><rect width="254" height="124" rx="14" fill="#131E2C" stroke="#344A5C"/><text x="127" y="37" fill="#4CE0CB" font-size="13" font-weight="700">REPORT</text><text x="127" y="67" fill="#F3F7FA" font-size="16" font-weight="600">Terminal · JSON · Markdown</text><text x="127" y="91" fill="#9BB0C4" font-size="13">Risk · proven break · unknown</text></g>
+  </g>
+</svg>
