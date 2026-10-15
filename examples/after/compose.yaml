@@ -1,0 +1,25 @@
+services:
+  api:
+    image: example/api
+    depends_on: [db]
+    networks: [frontend]
+    environment:
+      DATABASE_URL: "postgres://example:redacted@db/example"
+  db:
+    image: postgres:16
+    networks: [backend]
+    volumes:
+      - db-data:/var/lib/postgresql/data
+volumes:
+  db-data: {}
+networks:
+  frontend: {}
+  backend: {}
+x-deploywitness:
+  required_network_links:
+    - from: api
+      to: db
+  required_mounts:
+    db: [/var/lib/postgresql/data]
+  required_environment:
+    api: [DATABASE_URL]

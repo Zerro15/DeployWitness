@@ -1,0 +1,17 @@
+name: Bug report
+description: Report incorrect behavior without sharing secrets
+title: 'bug: '
+labels: ['type:bug']
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal redacted Compose pair and command
+    validations:
+      required: true

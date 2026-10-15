@@ -1,0 +1,15 @@
+name: Feature request
+description: Propose a narrow capability
+title: 'feature: '
+labels: ['type:feature']
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and desired behavior
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria and example
