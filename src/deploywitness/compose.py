@@ -242,7 +242,15 @@ def load_compose(path: Path) -> ComposeModel:
     for service_name, data in doc["services"].items():
         if not isinstance(data, dict):
             continue
-        for field in ("env_file", "configs", "secrets", "links", "volumes_from"):
+        for field in (
+            "env_file",
+            "configs",
+            "secrets",
+            "links",
+            "volumes_from",
+            "ports",
+            "expose",
+        ):
             if field in data:
                 reasons.append(f"service {service_name} uses unsupported {field}")
         mount_entries = data.get("volumes", [])

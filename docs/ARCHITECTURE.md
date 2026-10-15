@@ -14,7 +14,7 @@ The witness schema version is `1`. Findings carry a rule ID, status, baseline fa
 - Network aliases do not change modeled network membership. External network declarations are treated as named memberships; the tool cannot verify that the external network exists at runtime.
 - `depends_on` is a structural dependency, not evidence of network connectivity. Removing an edge is a risk; a dangling target in the candidate is a proven invalid configuration.
 - Removed services, shared-network relationships, mounts, and declared environment keys are detected. Without an explicit invariant, their removal is a risk. `required_mounts` asserts that a service has a mount at a target; changing its source is a risk, not proof of data loss.
-- `env_file`, configs, secrets, legacy `links`, `volumes_from`, conditional `depends_on`, advanced long-form mount options, and top-level named-volume driver/name options produce `UNKNOWN` because their effective behavior is not modeled.
+- `env_file`, configs, secrets, legacy `links`, `volumes_from`, host port publishing (`ports`/`expose`), conditional `depends_on`, advanced long-form mount options, and top-level named-volume driver/name options produce `UNKNOWN` because their effective behavior is not modeled.
 - Mount comparison is syntactic. It does not inspect data or prove data loss. Source references point to parsed service fields and contract declarations, not every YAML scalar.
 - Docker Compose validation is not run; its rendered model may differ. `NO_FINDING` applies only to implemented rules.
 

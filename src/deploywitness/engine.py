@@ -50,8 +50,11 @@ def _network_contract(model: ComposeModel, source: str, target: str) -> bool:
             not isinstance(link, dict)
             or not isinstance(link.get("from"), str)
             or not isinstance(link.get("to"), str)
+            or not link.get("from")
+            or not link.get("to")
+            or link.get("from") == link.get("to")
         ):
-            raise InputError("required_network_links entries need string from/to values")
+            raise InputError("required_network_links need distinct, non-empty string endpoints")
     return any(link["from"] == source and link["to"] == target for link in links)
 
 
@@ -65,8 +68,11 @@ def _all_links(model: ComposeModel) -> set[tuple[str, str]]:
             not isinstance(link, dict)
             or not isinstance(link.get("from"), str)
             or not isinstance(link.get("to"), str)
+            or not link.get("from")
+            or not link.get("to")
+            or link.get("from") == link.get("to")
         ):
-            raise InputError("required_network_links entries need string from/to values")
+            raise InputError("required_network_links need distinct, non-empty string endpoints")
         result.add((link["from"], link["to"]))
     return result
 

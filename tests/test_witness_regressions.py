@@ -243,6 +243,12 @@ def statuses(tmp_path: Path, before: str, after: str) -> set[str]:
             "x-deploywitness: {required_network_links: []}",
             "UNKNOWN",
         ),
+        # Scenario 41: host-published port changes are not silently ignored.
+        (
+            "services: {api: {ports: ['8080:80']}}",
+            "services: {api: {ports: ['9090:80']}}",
+            "UNKNOWN",
+        ),
     ],
 )
 def test_independent_confidence_scenarios(
@@ -298,6 +304,17 @@ def test_excessive_yaml_depth_is_rejected(tmp_path: Path) -> None:
     )
     with pytest.raises(InputError):
         load_compose(path)
+
+
+def test_self_network_contract_cannot_prove_a_break(tmp_path: Path) -> None:
+    base, head = pair(
+        tmp_path,
+        "services: {api: {networks: [n]}}\n"
+        "x-deploywitness: {required_network_links: [{from: api, to: api}]}",
+        "services: {api: {networks: []}}",
+    )
+    with pytest.raises(InputError):
+        compare(base, head)
 
 
 def test_witness_source_refs_are_recomputed_and_bounded(tmp_path: Path) -> None:
