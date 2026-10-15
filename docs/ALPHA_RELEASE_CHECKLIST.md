@@ -10,6 +10,7 @@ This checklist prepares `0.1.0a1`; it does not publish a release or package.
 - [ ] Select the exact version and commit. Keep `pyproject.toml`, `CHANGELOG.md`, and release notes aligned.
 - [ ] Run `python -m pytest`, `python -m ruff check .`, `python -m mypy src`, `python scripts/check_i18n.py`, and `git diff --check`.
 - [ ] Build with `python -m build`; inspect wheel and sdist contents.
+- [ ] Generate `SHA256SUMS.txt` from the exact wheel and sdist, verify both entries, and attach the file with the artifacts.
 - [ ] Create a clean Python 3.12 virtual environment, install the wheel, run `deploywitness --help`, `deploywitness version`, and a checked-in example.
 - [ ] Confirm workflow action dependencies and reusable workflow are pinned to reviewed commits; verify green CI for the exact commit.
 - [ ] Review the [supported feature matrix](SUPPORTED_COMPOSE_FEATURES.md), known limitations, English/Russian instructions, and upgrade notes.
@@ -19,7 +20,13 @@ This checklist prepares `0.1.0a1`; it does not publish a release or package.
 
 1. After maintainer approval, create an annotated `v0.1.0a1` tag on the reviewed commit.
 2. Create a GitHub pre-release from that tag using [`releases/0.1.0a1.md`](releases/0.1.0a1.md); include wheel and sdist only if their checksums and contents were verified.
-3. Link the installation, limitations, and upgrade docs. Do not call the alpha production-ready.
+3. Attach `SHA256SUMS.txt` and link the [installation](GETTING_STARTED.md), limitations, and upgrade docs. Do not call the alpha production-ready.
+
+## First public announcement
+
+1. Publish the GitHub pre-release only after the checklist above is complete and the remaining fork-test limitation is stated.
+2. Announce it first in the repository's GitHub Discussions or README release section, linking directly to the release, installation guide, feature matrix, and security policy.
+3. Keep the announcement scoped: early Compose alpha, supported static checks, user-owned runners, no backend or telemetry, and known limitations. Do not claim full Compose compatibility, runtime outage prediction, or production readiness.
 
 ## PyPI plan (separate approval)
 
