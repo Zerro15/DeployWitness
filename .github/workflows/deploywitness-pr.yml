@@ -1,0 +1,62 @@
+name: DeployWitness PR analysis
+
+on:
+  workflow_call:
+    inputs:
+      deploywitness_ref:
+        description: Reviewed DeployWitness commit or ref to run
+        required: false
+        type: string
+        default: main
+
+permissions:
+  contents: read
+
+jobs:
+  compose-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      # Check out the target repository's trusted base only. The PR head is fetched
+      # as Git data and is never checked out or executed.
+      - name: Check out target repository base
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: target
+          fetch-depth: 1
+          persist-credentials: true
+
+      - name: Check out DeployWitness source
+        uses: actions/checkout@v5
+        with:
+          repository: Zerro15/DeployWitness
+          ref: ${{ inputs.deploywitness_ref }}
+          path: tools/deploywitness
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install trusted DeployWitness
+        run: python -m pip install ./tools/deploywitness
+
+      - name: Fetch pull request head as data
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        working-directory: target
+        run: git fetch --depth=1 --no-tags origin "refs/pull/${PR_NUMBER}/head"
+
+      - name: Remove checkout credential
+        working-directory: target
+        run: git config --local --unset-all http.https://github.com/.extraheader
+
+      - name: Analyze changed Compose files
+        env:
+          DEPLOYWITNESS_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          DEPLOYWITNESS_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        working-directory: target
+        run: python ../tools/deploywitness/scripts/github_pr_check.py

@@ -6,9 +6,29 @@
 
 ## GitHub Actions
 
-В репозитории есть [пример workflow](../../.github/workflows/example-check.yml). Он запускается вручную (`workflow_dispatch`), имеет `contents: read` и сравнивает фиксированные файлы `examples/before/compose.yaml` и `examples/fixed/compose.yaml`.
+DeployWitness предоставляет reusable workflow, который сравнивает base и head PR на GitHub-hosted runner владельца репозитория. Добавьте workflow:
 
-Это демонстрация запуска CLI, а не готовая проверка Pull Request: workflow не получает base/head PR автоматически, не создаёт комментарий или Markdown summary и не использует отдельный GitHub Action. Не применяйте привилегированный `pull_request_target` для запуска недоверенного кода.
+```yaml
+name: DeployWitness
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  compose-analysis:
+    uses: Zerro15/DeployWitness/.github/workflows/deploywitness-pr.yml@main
+    with:
+      deploywitness_ref: main
+```
+
+Для постоянного использования закрепите и uses, и deploywitness_ref на проверенном SHA DeployWitness. Workflow отдельно получает базовую ревизию репозитория и исходный код DeployWitness, загружает head PR только как Git-данные и помещает Markdown-отчёт в summary запуска Actions. Код PR не checkout-ится и не выполняется; комментарии в PR и передача конфигурации на сервер DeployWitness не используются.
+
+PROVEN_CONFIG_BREAK завершает проверку ошибкой. POTENTIAL_RISK остаётся предупреждением. UNKNOWN явно обозначает неполный анализ и также завершает проверку ошибкой. Чистый результат означает только отсутствие проблем среди реализованных правил. Добавленные или удалённые Compose-файлы, несколько Compose-файлов в одной директории, неподдерживаемые возможности и слишком большие файлы дают UNKNOWN.
+
+[Ручной пример workflow](../../.github/workflows/example-check.yml) по-прежнему доступен для запуска CLI на фиксированных примерах репозитория.
 
 ## GitLab CI
 

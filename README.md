@@ -98,7 +98,7 @@ Without an explicit contract, a removed relationship is reported as a risk. `dep
 
 ## CI integrations
 
-The repository includes a [GitHub Actions example](.github/workflows/example-check.yml) that runs on the repository owner's runner with read-only contents permission. Current GitHub, GitLab, and Forgejo examples compare explicit files. **Automatic PR base/head discovery and a published GitHub Action are not implemented yet.** See [CI examples and limits](docs/INTEGRATIONS.md).
+For GitHub, add the [reusable PR workflow](docs/INTEGRATIONS.md) to compare base/head Compose data and publish a Markdown job summary on your runner. It uses contents: read, does not execute PR code, and needs no DeployWitness account or backend. Risk remains advisory; proven breaks and incomplete analysis are visible as separate statuses.
 
 ## Documentation
 

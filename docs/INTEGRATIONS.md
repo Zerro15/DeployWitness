@@ -6,7 +6,29 @@ Install dependencies in the repository owner's runner. Pin a release or commit o
 
 ## GitHub Actions
 
-The repository's [example workflow](../.github/workflows/example-check.yml) is manually dispatched (`workflow_dispatch`), uses `contents: read`, and compares the checked-in `examples/before/compose.yaml` and `examples/fixed/compose.yaml`. It demonstrates the CLI only. It does not discover pull request base/head, post a comment or summary, or use a published GitHub Action.
+DeployWitness provides a reusable workflow that compares the pull request base and head on the repository owner's GitHub-hosted runner. Add a caller workflow such as:
+
+```yaml
+name: DeployWitness
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  compose-analysis:
+    uses: Zerro15/DeployWitness/.github/workflows/deploywitness-pr.yml@main
+    with:
+      deploywitness_ref: main
+```
+
+For production use, pin both uses and deploywitness_ref to a reviewed DeployWitness commit SHA. The workflow checks out the target repository's base commit and DeployWitness source separately, fetches the PR head as Git data, and writes the report to the GitHub Actions job summary. It does not check out or execute PR code, create comments, or send configuration to a DeployWitness service.
+
+PROVEN_CONFIG_BREAK fails the check. POTENTIAL_RISK is advisory. UNKNOWN fails visibly as inconclusive. A clean result means only that implemented checks found no issue. Added/deleted Compose files, multiple Compose files in the same directory, unsupported features, or oversized inputs are reported as UNKNOWN.
+
+The [manual example workflow](../.github/workflows/example-check.yml) remains available for trying the CLI against the repository's fixed examples.
 
 ## GitLab
 
