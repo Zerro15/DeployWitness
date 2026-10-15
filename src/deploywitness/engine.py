@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Any, cast
 
 from deploywitness.compose import InputError, load_compose
+from deploywitness.graph import ContractGraph
 from deploywitness.model import ComposeModel, SourceRef, Status, Witness
 
 
@@ -38,6 +39,8 @@ def _required(model: ComposeModel, kind: str, service: str, item: str) -> bool:
 def compare(base_path: Path, head_path: Path) -> list[Witness]:
     base = load_compose(base_path)
     head = load_compose(head_path)
+    base_graph = ContractGraph.from_compose(base)
+    head_graph = ContractGraph.from_compose(head)
     findings: list[Witness] = []
     unresolved = base.unresolved or head.unresolved
     links = base.contracts.get("required_network_links", [])
@@ -51,8 +54,8 @@ def compare(base_path: Path, head_path: Path) -> list[Witness]:
         old, new = base.services[name], head.services[name]
         targets = old.depends_on | {target for source, target in declared_pairs if source == name}
         for target in sorted(targets & base.services.keys() & head.services.keys()):
-            old_shared = old.networks & base.services[target].networks
-            new_shared = new.networks & head.services[target].networks
+            old_shared = base_graph.shared_networks(name, target)
+            new_shared = head_graph.shared_networks(name, target)
             if old_shared and not new_shared:
                 contract = _network_contract(base, name, target)
                 status: Status = "UNKNOWN" if unresolved else (

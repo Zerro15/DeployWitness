@@ -1,6 +1,6 @@
 # Architecture
 
-DeployWitness is a local CLI and Python library. `compose.py` accepts a bounded, safe YAML subset and builds service, network, mount, dependency, and environment-key facts. `engine.py` compares two immutable models and emits a `Witness`. `report.py` serializes the same model to terminal, JSON, or Markdown. No backend or Docker access exists.
+DeployWitness is a local CLI and Python library. `compose.py` accepts a bounded, safe YAML subset and builds service, network, mount, dependency, and environment-key facts. `graph.py` turns those facts into typed service-to-network, service-to-mount, and service-to-dependency edges. `engine.py` compares two models and emits a `Witness`. `report.py` serializes the same model to terminal, JSON, or Markdown. No backend or Docker access exists.
 
 The witness schema version is `1`. Each finding carries a rule ID, status, baseline facts, changed elements, invariant, source lines, suggested fix, and static test descriptor. `verify_static` recomputes a witness against files. The test descriptor is declarative, never executable code.
 
