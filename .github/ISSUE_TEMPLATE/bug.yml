@@ -3,15 +3,20 @@ description: Report incorrect behavior without sharing secrets
 title: 'bug: '
 labels: ['type:bug']
 body:
+  - type: markdown
+    attributes:
+      value: You may write this report in English or Russian. Please redact secrets and customer data.
   - type: textarea
     id: problem
     attributes:
       label: Problem and expected behavior
+      description: English or Russian is welcome.
     validations:
       required: true
   - type: textarea
     id: repro
     attributes:
       label: Minimal redacted Compose pair and command
+      description: English or Russian is welcome. Never include production secrets.
     validations:
       required: true

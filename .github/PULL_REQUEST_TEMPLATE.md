@@ -1,3 +1,5 @@
+You may complete this template in English or Russian. English PR titles are preferred for international discoverability.
+
 ## Problem and change
 
 ## Evidence

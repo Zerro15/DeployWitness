@@ -5,6 +5,8 @@
   </picture>
 </p>
 
+<p align="center"><a href="README.md">English</a> | <a href="README.ru.md">Русский</a></p>
+
 <p align="center"><strong>Know what breaks before you deploy.</strong><br>
 Compare Docker Compose changes, check declared contracts, and get a deterministic explanation when one is broken.</p>
 
@@ -52,16 +54,16 @@ The witness establishes a static Compose contract violation. It does not claim a
 
 ## Quick start
 
-Requires Python 3.12+. The package is not published on PyPI yet; install from a reviewed checkout:
+Requires Python 3.12+. The package is not published on PyPI yet. To try the current Compose alpha, install its source branch:
 
 ```bash
-git clone https://github.com/Zerro15/DeployWitness.git
+git clone --branch feat/compose-witness-mvp https://github.com/Zerro15/DeployWitness.git
 cd DeployWitness
 python -m pip install .
 deploywitness check --base examples/before/compose.yaml --head examples/after/compose.yaml
 ```
 
-To work on DeployWitness, install development tools with `python -m pip install -e '.[dev]'`. `scan` discovers a Compose file and summarizes its services; change analysis requires explicit `--base` and `--head` files. If multiple standard Compose files are found, choose one with `--file`—the tool does not guess which file is deployed.
+To work on DeployWitness, install development tools with `python -m pip install -e '.[dev]'`. `scan` discovers a Compose file and summarizes its services; it does not compare changes. Change analysis requires explicit `--base` and `--head` files. If multiple standard Compose files are found, choose one with `--file`—the tool does not guess which file is deployed.
 
 ```bash
 deploywitness scan .
@@ -101,9 +103,13 @@ The repository includes a [GitHub Actions example](.github/workflows/example-che
 ## Documentation
 
 - [Architecture and supported Compose behavior](docs/ARCHITECTURE.md)
+- [Getting started](docs/GETTING_STARTED.md) · [CLI reference](docs/CLI_REFERENCE.md)
+- [Failure Witness](docs/FAILURE_WITNESS.md) · [Supported Compose features](docs/SUPPORTED_COMPOSE_FEATURES.md)
 - [Security architecture](docs/SECURITY_ARCHITECTURE.md)
 - [Competitive analysis](docs/COMPETITIVE_ANALYSIS.md)
 - [CI integration examples](docs/INTEGRATIONS.md)
+- [FAQ](docs/FAQ.md) · [Documentation index](docs/README.md)
+- [Русская документация](docs/ru/README.md) · [Translation guide](docs/i18n/TRANSLATION_GUIDE.md)
 - [Roadmap](ROADMAP.md)
 - [Release strategy](docs/RELEASING.md)
 - [Brand guidelines](BRAND_GUIDELINES.md)
