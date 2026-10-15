@@ -3,13 +3,18 @@ description: Propose a narrow capability
 title: 'feature: '
 labels: ['type:feature']
 body:
+  - type: markdown
+    attributes:
+      value: You may write this proposal in English or Russian. English issue titles are preferred for international discoverability.
   - type: textarea
     id: problem
     attributes:
       label: Problem and desired behavior
+      description: English or Russian is welcome.
     validations:
       required: true
   - type: textarea
     id: acceptance
     attributes:
       label: Acceptance criteria and example
+      description: English or Russian is welcome.

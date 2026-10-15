@@ -1,0 +1,19 @@
+name: Question
+description: Ask about using DeployWitness or its current behavior
+title: 'question: '
+body:
+  - type: markdown
+    attributes:
+      value: You may ask in English or Russian. English issue titles are preferred for international discoverability.
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: Describe what you are trying to do and what you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context (optional)
+      description: Include a redacted command and output if relevant. Do not include secrets or customer configuration.

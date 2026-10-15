@@ -1,5 +1,7 @@
 # Architecture
 
+[English](ARCHITECTURE.md) | [Русский](ru/ARCHITECTURE.md) · [Documentation index](README.md)
+
 DeployWitness is a local CLI and Python library. `compose.py` parses a bounded, safe YAML subset into service, network, mount, dependency, and environment-key facts. `graph.py` builds typed service relationships. `engine.py` compares those facts and emits deterministic witnesses. `report.py` renders terminal, JSON, and Markdown. There is no backend or Docker access.
 
 The witness schema version is `1`. Findings carry a rule ID, status, baseline facts, changed elements, invariant, source references, proposed fix, and declarative static test. `verify_static` reparses both inputs and recomputes the complete expected witness; it accepts only exact agreement across every field. Static test descriptors are never executed.
@@ -7,6 +9,8 @@ The witness schema version is `1`. Findings carry a rule ID, status, baseline fa
 `PROVEN_CONFIG_BREAK` is reserved for an explicit configuration invariant that held in the baseline and is false in the candidate, or a structurally invalid candidate dependency. `POTENTIAL_RISK` means a relevant change has no sufficient contract. `UNKNOWN` means the effective configuration or baseline contract cannot be established. `REPRODUCED_FAILURE` is reserved for future isolated reproduction and is never emitted today. `NO_FINDING` means only that no implemented rule found a change.
 
 ## Supported semantics and limits
+
+See the dedicated [supported Compose features](SUPPORTED_COMPOSE_FEATURES.md) page for the current behavior matrix.
 
 - The parser recognizes one effective Compose file. It does not merge files, resolve interpolation, select profiles, or resolve `include`, `extends`, or `network_mode`; those cases produce `UNKNOWN`.
 - A conventional override filename also produces `UNKNOWN` unless users first provide a reviewed effective file. The tool never executes Compose interpolation or commands from the analyzed repository.
