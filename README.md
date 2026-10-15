@@ -43,9 +43,9 @@ x-deploywitness:
     api: [DATABASE_URL]
 ```
 
-Current rules detect a lost shared network for a declared link or `depends_on` pair, changed or removed mounts, removed environment keys, and changed values for keys marked significant by `required_environment`. `depends_on` alone is only a discovery hint, never proof of required connectivity. Mount changes do not prove data loss. A changed value without an exact value contract is a risk. Environment values and their digests are never included in reports. JSON and Markdown output are available with `--format`.
+Current rules detect removed services, shared-network relationships, dependency edges, mounts, and environment keys. Explicit contracts can prove that a declared network link, mount target, or environment key is absent. `depends_on` alone is never proof of required network connectivity. A mount contract describes target presence only: a changed source is a risk, not proof of data loss. Significant environment value changes are risks; values and their digests are never included in reports. JSON and Markdown output are available with `--format`.
 
-Unresolved interpolation, profiles, `include`, and `extends` downgrade potential proofs to `UNKNOWN`. Multi-file overrides are not merged in this alpha version. Pass already resolved, reviewed files for meaningful comparisons; do not resolve untrusted Compose files by executing them. Docker and a Docker socket are not required.
+Unresolved interpolation, profiles, `include`, `extends`, `network_mode`, YAML merge keys, unsupported attachments such as `env_file`, configs, and secrets, and top-level named-volume options produce `UNKNOWN`; the tool will not label an incomplete analysis `NO_FINDING`. Multi-file overrides are not merged in this alpha version. Acyclic YAML anchors, network aliases, and declared external network names are understood, but external network existence is not checked. Pass already resolved, reviewed files for meaningful comparisons; do not resolve untrusted Compose files by executing them. Docker and a Docker socket are not required.
 
 ## Local checks and CI
 

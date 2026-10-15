@@ -20,6 +20,7 @@ class Mount:
     target: str
     kind: str
     source: str | None
+    mode: str | None = None
 
 
 @dataclass(frozen=True)
@@ -40,6 +41,8 @@ class ComposeModel:
     contracts: dict[str, Any]
     lines: dict[str, int]
     unresolved: bool
+    unresolved_reasons: tuple[str, ...] = ()
+    contracts_present: bool = False
 
 
 @dataclass(frozen=True)

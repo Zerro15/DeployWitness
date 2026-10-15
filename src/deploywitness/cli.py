@@ -33,21 +33,31 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     try:
         if args.command == "scan":
-            candidates = [args.file] if args.file else [args.path / name for name in NAMES
-                                                       if (args.path / name).is_file()]
+            candidates = (
+                [args.file]
+                if args.file
+                else [args.path / name for name in NAMES if (args.path / name).is_file()]
+            )
+            if len(candidates) > 1:
+                print(
+                    "UNKNOWN - multiple Compose files found; select one reviewed effective file "
+                    "with --file"
+                )
+                return 3
             if len(candidates) != 1:
                 raise InputError(f"Found {len(candidates)} Compose files; choose one with --file")
             model = load_compose(candidates[0])
             print(f"Discovered {model.path}: {len(model.services)} services")
             if model.unresolved:
-                print("UNKNOWN - interpolation, profiles, include or extends "
-                      "need explicit resolution")
+                print(f"UNKNOWN - analysis incomplete: {'; '.join(model.unresolved_reasons)}")
                 return 3
             print("NO_FINDING - scan has no base state; use check for change analysis")
             return 0
         findings = compare(args.base, args.head)
         print(render(findings, args.format))
-        return 2 if any(w.status == "PROVEN_CONFIG_BREAK" for w in findings) else 0
+        if any(w.status == "PROVEN_CONFIG_BREAK" for w in findings):
+            return 2
+        return 3 if any(w.status == "UNKNOWN" for w in findings) else 0
     except (InputError, OSError) as exc:
         print(f"deploywitness: {exc}", file=sys.stderr)
         return 3
