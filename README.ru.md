@@ -53,11 +53,12 @@ PROVEN_CONFIG_BREAK COMPOSE_NETWORK_LINK api->db: Required or previously shared 
 
 ## Быстрый запуск
 
-Нужен Python 3.12 или новее. Пакет пока не опубликован в PyPI. Чтобы попробовать текущую Compose alpha, установите пакет из её ветки:
+Нужен Python 3.12 или новее. До публикации первого релиза установите проверенный commit `main` по инструкции ниже. После публикации рекомендуется установить проверенный wheel из [GitHub Release](https://github.com/Zerro15/DeployWitness/releases); шаги установки и проверки контрольной суммы описаны в разделе [«Начало работы»](docs/ru/GETTING_STARTED.md).
 
 ```bash
-git clone --branch feat/compose-witness-mvp https://github.com/Zerro15/DeployWitness.git
+git clone https://github.com/Zerro15/DeployWitness.git
 cd DeployWitness
+git checkout --detach f40f05da1a374a79979d8958e8bacef7c360848b
 python -m pip install .
 deploywitness check --base examples/before/compose.yaml --head examples/after/compose.yaml
 ```
@@ -97,7 +98,7 @@ x-deploywitness:
 
 ## CI-интеграции
 
-Для GitHub можно подключить [reusable workflow для PR](docs/ru/CI_INTEGRATIONS.md): он сравнивает Compose base/head и публикует Markdown summary на runner владельца репозитория. Нужен только contents: read; код PR не запускается, аккаунт DeployWitness и backend не нужны. Риск остаётся предупреждением, а доказанное нарушение и неполный анализ имеют отдельные статусы.
+Для GitHub можно подключить [reusable workflow для PR](docs/ru/CI_INTEGRATIONS.md): он сравнивает Compose base/head и публикует Markdown summary на runner владельца репозитория. Нужен только contents: read; код PR не запускается, аккаунт DeployWitness и backend не нужны. Настоящий запуск PR из fork пока не проверялся. Риск остаётся предупреждением, а доказанное нарушение и неполный анализ имеют отдельные статусы.
 
 ## Документация
 

@@ -54,11 +54,12 @@ The witness establishes a static Compose contract violation. It does not claim a
 
 ## Quick start
 
-Requires Python 3.12+. The package is not published on PyPI yet. To try the current Compose alpha, install its source branch:
+Requires Python 3.12+. Until the first release is published, install the reviewed `main` commit below. After publication, the recommended install is the verified wheel attached to the [GitHub Release](https://github.com/Zerro15/DeployWitness/releases); see [Getting started](docs/GETTING_STARTED.md) for checksum verification and installation steps.
 
 ```bash
-git clone --branch feat/compose-witness-mvp https://github.com/Zerro15/DeployWitness.git
+git clone https://github.com/Zerro15/DeployWitness.git
 cd DeployWitness
+git checkout --detach f40f05da1a374a79979d8958e8bacef7c360848b
 python -m pip install .
 deploywitness check --base examples/before/compose.yaml --head examples/after/compose.yaml
 ```
@@ -98,7 +99,7 @@ Without an explicit contract, a removed relationship is reported as a risk. `dep
 
 ## CI integrations
 
-For GitHub, add the [reusable PR workflow](docs/INTEGRATIONS.md) to compare base/head Compose data and publish a Markdown job summary on your runner. It uses contents: read, does not execute PR code, and needs no DeployWitness account or backend. Risk remains advisory; proven breaks and incomplete analysis are visible as separate statuses.
+For GitHub, add the [reusable PR workflow](docs/INTEGRATIONS.md) to compare base/head Compose data and publish a Markdown job summary on your runner. It uses contents: read, does not execute PR code, and needs no DeployWitness account or backend. A real fork-originated run has not yet been verified. Risk remains advisory; proven breaks and incomplete analysis are visible as separate statuses.
 
 ## Documentation
 
