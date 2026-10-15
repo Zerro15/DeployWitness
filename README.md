@@ -61,4 +61,4 @@ Examples for [GitHub Actions](.github/workflows/example-check.yml), [GitLab](doc
 
 ## Roadmap and contribution
 
-See [ROADMAP.md](ROADMAP.md), [architecture](docs/ARCHITECTURE.md), [security architecture](docs/SECURITY_ARCHITECTURE.md), and [competitive analysis](docs/COMPETITIVE_ANALYSIS.md). Contributions are welcome under [CONTRIBUTING.md](CONTRIBUTING.md). This project follows SemVer; `0.1.0a1` is pre-release and the witness schema may change before `1.0.0`.
+See [ROADMAP.md](ROADMAP.md), [architecture](docs/ARCHITECTURE.md), [security architecture](docs/SECURITY_ARCHITECTURE.md), [competitive analysis](docs/COMPETITIVE_ANALYSIS.md), and [release strategy](docs/RELEASING.md). Contributions are welcome under [CONTRIBUTING.md](CONTRIBUTING.md). This project follows SemVer; `0.1.0a1` is pre-release and the witness schema may change before `1.0.0`.
